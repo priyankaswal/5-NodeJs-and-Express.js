@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Contact Us</title>
+  <script>
+    function validateForm(event) {
+      const name = document.getElementById("name").value;
+      const email = document.getElementById("email").value;
+
+      if (name === "" || email === "") {
+        alert("Both name and email fields are required.");
+        event.preventDefault();
+      }
+    }
+  </script>
+</head>
+<body>
+  <form action="/contact-us" method="post" onsubmit="validateForm(event)">
+    <input type="text" id="name" name="name" placeholder="Enter your name">
+    <br>
+    <input type="text" id="email" name="email" placeholder="Enter email">
+    <br>
+    <input type="submit" value="Submit">
+  </form>
+</body>
+</html>
