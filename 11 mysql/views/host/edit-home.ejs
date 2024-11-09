@@ -1,0 +1,52 @@
+<%- include('../partials/head')%>
+  </head>
+  <body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <%- include('../partials/nav')%>
+    <div class="bg-white p-8 rounded-lg shadow-md max-w-sm w-full">
+      <h1 class="text-2xl font-bold text-gray-700 mb-6 text-center"> <%= editing ? "Edit" : "Add"%> Your Home</h1>
+      <form action='/host/<%= editing ? "edit-home" : "add-home" %>' method="post" class="space-y-4">
+        <input type="hidden" name="id" value="<%= editing ? home.id : '' %>" /> 
+        <input
+          type="text"
+          name="houseName"
+          value="<%= editing ? home.houseName : '' %>"
+          placeholder="Name of your house"
+          class="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+        />
+        <input
+          type="text"
+          name="price"
+          value="<%= editing ? home.price : '' %>"
+          placeholder="Daily rent of your home"
+          class="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+        />
+        <input
+          type="text"
+          name="location"
+          value="<%= editing ? home.location : '' %>"
+          placeholder="Where is your home"
+          class="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+        />
+        <input
+          type="text"
+          name="rating"
+          value="<%= editing ? home.rating : '' %>"
+          placeholder="Rating of the house"
+          class="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+        />
+        <input
+          type="text"
+          name="photoUrl"
+          value="<%= editing ? home.photoUrl : '' %>"
+          placeholder="Upload a photo"
+          class="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+        />
+        <input
+          type="submit"
+          value='<%= editing ? "Updae" : "Add" %> Home'
+          class="w-full p-3 bg-blue-500 text-white font-semibold rounded cursor-pointer hover:bg-blue-600"
+        />
+      </form>
+    </div>
+  </body>
+</html>
