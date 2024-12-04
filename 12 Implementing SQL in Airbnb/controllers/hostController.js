@@ -1,3 +1,4 @@
+const Favourite = require("../models/Favourite");
 const Home = require("./../models/Home");
 
 exports.getAddHome = (req, res, next) => {
@@ -57,20 +58,34 @@ exports.postEditHome = (req, res, next) => {
     description
   );
   newHome.id = id;
-  newHome.save((error) => {
-    if (error) {
-      console.log("Error while updating home", error);
-    } else {
+  newHome
+    .save()
+    .then(() => {
       res.redirect("/host/host-homes");
-    }
-  });
+    })
+    .catch((error) => {
+      console.log("Error while updating home", error);
+      res.redirect("/host/host-homes");
+    });
 };
 
-exports.postDeleteHome = (req, res, next) => {
+exports.postDeleteHome = async (req, res, next) => {
   const homeId = req.params.homeId;
   Home.deleteById(homeId).then(() => {
     res.redirect("/host/host-homes");
   });
+
+  // try {
+  //   const homeId = req.params.homeId;
+
+  //   await Promise.all([
+  //     Home.deleteById(homeId),
+  //     Favourite.deleteById(homeId)
+  //   ]);
+  //   res.redirect("/host/host-homes");
+  // } catch (err) {
+  //   console.log("Error while deleting home:", err);
+  // }
 };
 
 exports.getHostHomes = (req, res, next) => {

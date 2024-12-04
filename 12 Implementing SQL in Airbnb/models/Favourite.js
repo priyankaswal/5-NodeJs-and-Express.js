@@ -1,31 +1,17 @@
-const fs = require("fs");
-const path = require("path");
-const rootDir = require("../util/path-util");
-const favouriteFilePath = path.join(rootDir, "data", "favourite.json");
+const airbnbDb = require("../util/database-util");
 
 module.exports = class Favourite {
-
-  static fetchAll(callback) {
-    fs.readFile(favouriteFilePath, (err, data) => {
-      if (err) {
-        callback([]);
-      } else {
-        callback(JSON.parse(data));
-      }
-    });
+  static fetchAll() {
+    return airbnbDb.execute(`SELECT * FROM favourites`);
   }
 
-  static addToFavourites(homeId , callback){
-    Favourite.fetchAll(favouriteIds => {
-      favouriteIds.push(homeId);
-      fs.writeFile(favouriteFilePath, JSON.stringify(favouriteIds), callback);
-    })
+  static addToFavourites(homeId) {
+    return airbnbDb.execute(`INSERT INTO favourites (favIds) VALUES(?)`, [
+      homeId,
+    ]);
   }
 
-  static deleteById(removeHomeId , callback){
-    Favourite.fetchAll(homeIds => {
-      const newHomeIds = homeIds.filter(homeId => homeId !== removeHomeId);
-      fs.writeFile(favouriteFilePath , JSON.stringify(newHomeIds) , callback);
-    })
+  static deleteById(homeId) {
+    return airbnbDb.execute(`DELETE FROM favourites where favIds=?`, [homeId]);
   }
 };
