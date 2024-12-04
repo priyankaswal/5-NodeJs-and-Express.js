@@ -1,0 +1,29 @@
+{
+  "name": "7-airbnb",
+  "version": "1.0.0",
+  "description": " ",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "tailwind": " npx tailwindcss -i ./public/styles/input.css -o ./public/styles/output.css --watch",
+    "start": "concurrently \"npm run tailwind\" \"nodemon app.js\""
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^9.0.1",
+    "nodemon": "^3.1.7",
+    "tailwindcss": "^3.4.14"
+  },
+  "dependencies": {
+    "body-parser": "^1.20.3",
+    "connect-mongodb-session": "^5.0.0",
+    "dotenv": "^16.4.7",
+    "ejs": "^3.1.10",
+    "express": "^4.21.1",
+    "express-session": "^1.18.1",
+    "mongodb": "^6.10.0",
+    "mongoose": "^8.8.2",
+    "mysql2": "^3.11.4"
+  }
+}
