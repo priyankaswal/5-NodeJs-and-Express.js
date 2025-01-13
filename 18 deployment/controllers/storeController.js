@@ -1,7 +1,7 @@
 const path = require("path");
 const rootDir = require("../util/path-util");
 const mongoose = require("mongoose");
-const Home = require("./../models/Home");
+const Home = require("../models/Home");
 const User = require("../models/User");
 
 exports.getIndex = (req, res, next) => {
@@ -63,17 +63,25 @@ exports.postAddFavourites = async (req, res, next) => {
   }
 };
 
-exports.postRemoveFavourite = (req, res, next) => {
+exports.postRemoveFavourite = async (req, res, next) => {
   const homeId = req.params.homeId;
+  const userId = req.session.user._id;
+  
+  try{
+    const user = await User.findOne({ _id: userId });
+    if (!user) {
+      throw new Error("User not found");
+    }
 
-  Favourite.findOneAndDelete({ homeId })
-    .then(() => {
-      res.redirect("/favourites");
-    })
-    .catch((error) => {
-      console.log("Error while remove from favourites", error);
-      res.redirect("/favourites");
-    });
+    if (user.favouriteHomes.includes(homeId)) {
+      user.favouriteHomes = user.favouriteHomes.filter(favHomeId => favHomeId.toString() !== homeId);
+      await user.save();
+    }
+  }catch(err){
+    console.log("Error while remove from favourites", err);
+  }finally {
+    res.redirect("/favourites");
+  }
 };
 
 exports.getHomeDetails = (req, res, next) => {
@@ -92,19 +100,10 @@ exports.getHomeDetails = (req, res, next) => {
   });
 };
 
-exports.getRules = [
-  (req, res, next) => {
-    if (!req.session.isLoggedIn) {
-      return res.redirect("/login");
-    }
-    next();
-  },
-  
-  (req, res, next) => {
-    // const houseId = req.params.houseId;
-    const rulesFileName = "Airbnb_House_Rules.pdf";
-    const filePath = path.join(rootDir, "rules", rulesFileName);
-    // res.sendFile(filePath);
-    res.download(filePath, "Rules.pdf"); // comma k baad, download k time pe file ka dafualt name diya hua hai.
-  },
-];
+exports.getRules = (req, res, next) => {
+  // const houseId = req.params.houseId;
+  const rulesFileName = "Airbnb_House_Rules.pdf";
+  const filePath = path.join(rootDir, "rules", rulesFileName);
+  // res.sendFile(filePath);
+  res.download(filePath, "Rules.pdf"); // comma k baad, download k time pe file ka dafualt name diya hua hai.
+};
